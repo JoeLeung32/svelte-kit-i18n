@@ -1,0 +1,106 @@
+<script>
+    // Libraries
+    import {onMount} from 'svelte'
+    import {locale, t} from '$lib/translations'
+    import {ColorScheme, ColorSchemeStore} from "$lib/shares/js/ClassColorScheme/ClassColorScheme"
+    import {page} from '$app/stores'
+
+    $: ({route, lang} = $page.stuff)
+    let navBar
+
+    const checkActiveNav = () => {
+        if (!navBar) return
+        const navLinks = navBar.querySelectorAll('.chkLink')
+        const currentUrl = `/${lang}${route}`
+        navLinks.forEach((link) => {
+            if (currentUrl === link.getAttribute('href')) {
+                link.classList.add('active')
+            }
+        })
+    }
+
+    const checkColorSchemeMode = (val) => {
+        if (!navBar) return
+        navBar.classList.remove('navbar-dark', 'bg-dark', 'navbar-light', 'bg-light')
+        if (val === ColorScheme.DARK.description) {
+            navBar.classList.add('navbar-light', 'bg-light')
+        } else {
+            navBar.classList.add('navbar-dark', 'bg-dark')
+        }
+    }
+
+    onMount(async () => {
+        checkActiveNav()
+        checkColorSchemeMode(window.document.querySelector('html').dataset.colorScheme)
+        ColorSchemeStore.colorScheme.subscribe((obj) => {
+            checkColorSchemeMode(obj)
+        })
+    })
+</script>
+
+<nav bind:this="{navBar}" class="navbar navbar-expand-lg rounded-3">
+    <div class="container-fluid d-flex flex-wrap flex-column flex-lg-row justify-content-start align-items-start">
+        <a class="navbar-brand" href="/{$locale}/">ChunKit</a>
+        <div>
+            <button class="navbar-toggler ps-2 pe-1" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <i class="fa-solid fa-bars"></i>
+                <span class="navbar-brand text-muted">
+                    {$t('common.menu')}
+                </span>
+            </button>
+        </div>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link chkLink" aria-current="page" href="/{$locale}/">
+                        {$t('menu.home')}
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link chkLink" href="/{$locale}/about/">
+                        {$t('menu.about')}
+                    </a>
+                </li>
+                <!--
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                       data-bs-toggle="dropdown" aria-expanded="false">
+                        Dropdown
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item chkLink" href="/{$locale}/action/">Action</a></li>
+                        <li><a class="dropdown-item chkLink" href="/{$locale}/action/another">Another action</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item chkLink" href="/{$locale}/sth/">Something else here</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link disabled chkLink" href="/{$locale}/disabled/" tabindex="-1" aria-disabled="true">Disabled</a>
+                </li>
+                -->
+            </ul>
+            <!--
+            <form class="d-flex">
+                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+            -->
+        </div>
+    </div>
+</nav>
+
+<style lang="scss">
+    .navbar-toggler {
+      border: 0 none;
+      letter-spacing: 0.05rem;
+      text-transform: uppercase;
+      &:focus {
+        box-shadow: none;
+      }
+    }
+</style>
