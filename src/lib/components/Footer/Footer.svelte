@@ -2,9 +2,9 @@
     // Libraries
     import {browser} from '$app/env'
     import {loadTranslations, t} from '$lib/translations'
-    import {ClassColorScheme, ColorScheme} from "$lib/shares/js/ClassColorScheme/ClassColorScheme"
 
-    let colorScheme
+    // Components
+    import ColorSchemeSwitcher from '$lib/components/Switcher/ColorSchemeSwitcher.svelte'
 
     /** @type {import('@sveltejs/kit').Load} */
     export const load = async ({url}) => {
@@ -12,43 +12,15 @@
         const lang = `${pathname.match(/\w+?(?=\/|$)/) || ''}`
         const route = pathname.replace(new RegExp(`^/${lang}`), '')
 
-        if (colorScheme) {
-            colorScheme.watch()
-        }
-
         await loadTranslations(lang, route)
         return {stuff: {route, lang}}
     }
 </script>
 
 <script>
-    import {onMount} from "svelte";
-    import {writable} from 'svelte/store'
     import {page} from '$app/stores'
 
     $: ({route, lang} = $page.stuff)
-
-    const funcColorScheme = {
-        title: writable(0),
-        switch: () => {
-            if (!colorScheme) return
-            colorScheme.switch()
-            funcColorScheme.updateTitle()
-        },
-        updateTitle: () => {
-            if (!colorScheme) return
-            if (colorScheme.get() === ColorScheme.DARK.description) {
-                funcColorScheme.$title = ColorScheme.LIGHT.description
-            } else {
-                funcColorScheme.$title = ColorScheme.DARK.description
-            }
-        }
-    }
-    funcColorScheme.updateTitle()
-
-    onMount(async () => {
-        colorScheme = new ClassColorScheme()
-    })
 </script>
 
 {#if browser}
@@ -74,10 +46,7 @@
                 {/if}
             </div>
             <div class="ms-2">
-                <span class="curPoi notSel" title={$t(`common.colorScheme.${funcColorScheme.$title}`)}
-                      on:click={() => funcColorScheme.switch()}>
-                    <i class="fa-solid fa-circle-half-stroke"></i>
-                </span>
+                <ColorSchemeSwitcher />
             </div>
         </div>
     </footer>
