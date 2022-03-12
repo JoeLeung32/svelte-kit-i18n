@@ -1,13 +1,14 @@
 <script>
     import {onMount} from "svelte";
-    import Common from '$lib/stores/Common'
     import {t} from '$lib/translations'
-    import {ClassColorScheme} from "$lib/shares/js/ClassColorScheme/ClassColorScheme"
+    import {ClassColorScheme, ColorSchemeStore} from "$lib/shares/js/ClassColorScheme/ClassColorScheme"
 
     let colorScheme,
         valColorScheme
+    export let mode,
+        className
 
-    Common.colorScheme.subscribe((obj) => {
+    ColorSchemeStore.colorScheme.subscribe((obj) => {
         valColorScheme = obj
     })
 
@@ -21,5 +22,11 @@
 </script>
 
 <span class="curPoi notSel" title={$t(`common.valColorScheme.${valColorScheme}`)} on:click={switcherColorScheme}>
-    <i class="fa-solid fa-circle-half-stroke"></i>
+    {#if mode === 'string'}
+        <a href={"javascript:void(0)"} class={className}>
+            {$t(`common.colorScheme.${valColorScheme}To`)}
+        </a>
+    {:else}
+        <i class="fa-solid fa-circle-half-stroke"></i>
+    {/if}
 </span>

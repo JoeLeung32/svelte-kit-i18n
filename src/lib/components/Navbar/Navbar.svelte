@@ -2,31 +2,28 @@
     // Libraries
     import {onMount} from 'svelte'
     import {locale, t} from '$lib/translations'
-    import {ColorScheme, ColorSchemeStore} from "$lib/shares/js/ClassColorScheme/ClassColorScheme"
     import {page} from '$app/stores'
 
+    // Components
+    import ColorSchemeSwitcher from '$lib/components/Switcher/ColorSchemeSwitcher.svelte'
+    import {ColorSchemeStore} from "$lib/shares/js/ClassColorScheme/ClassColorScheme"
+
     $: ({route, lang} = $page.stuff)
-    let navBar
+    const colorSchemeMapping = {
+        dark: ['navbar-light', 'bg-light'],
+        light: ['navbar-dark', 'bg-dark']
+    }
+    let navBar,
+        curUrl
 
     const checkActiveNav = () => {
-        if (!navBar) return
-        const navLinks = navBar.querySelectorAll('.chkLink')
-        const currentUrl = `/${lang}${route}`
-        navLinks.forEach((link) => {
-            if (currentUrl === link.getAttribute('href')) {
-                link.classList.add('active')
-            }
-        })
+        curUrl = `/${lang}${route}`
     }
 
     const checkColorSchemeMode = (val) => {
         if (!navBar) return
         navBar.classList.remove('navbar-dark', 'bg-dark', 'navbar-light', 'bg-light')
-        if (val === ColorScheme.DARK.description) {
-            navBar.classList.add('navbar-light', 'bg-light')
-        } else {
-            navBar.classList.add('navbar-dark', 'bg-dark')
-        }
+        navBar.classList.add(...colorSchemeMapping[val])
     }
 
     onMount(async () => {
@@ -55,12 +52,14 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link chkLink" aria-current="page" href="/{$locale}/">
+                    <a class:active="{curUrl === `/${$locale}/`}"
+                       class="nav-link" href="/{$locale}/">
                         {$t('menu.home')}
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link chkLink" href="/{$locale}/about/">
+                    <a class:active="{curUrl === `/${$locale}/about/`}"
+                       class="nav-link" href="/{$locale}/about/">
                         {$t('menu.about')}
                     </a>
                 </li>
@@ -71,18 +70,21 @@
                         Dropdown
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item chkLink" href="/{$locale}/action/">Action</a></li>
-                        <li><a class="dropdown-item chkLink" href="/{$locale}/action/another">Another action</a></li>
+                        <li><a class="dropdown-item" href="/{$locale}/action/">Action</a></li>
+                        <li><a class="dropdown-item" href="/{$locale}/action/another">Another action</a></li>
                         <li>
                             <hr class="dropdown-divider">
                         </li>
-                        <li><a class="dropdown-item chkLink" href="/{$locale}/sth/">Something else here</a></li>
+                        <li><a class="dropdown-item" href="/{$locale}/sth/">Something else here</a></li>
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link disabled chkLink" href="/{$locale}/disabled/" tabindex="-1" aria-disabled="true">Disabled</a>
+                    <a class="nav-link disabled" href="/{$locale}/disabled/" tabindex="-1" aria-disabled="true">Disabled</a>
                 </li>
                 -->
+                <li class="nav-item d-lg-none">
+                    <ColorSchemeSwitcher mode="string" className="nav-link"/>
+                </li>
             </ul>
             <!--
             <form class="d-flex">
@@ -95,12 +97,13 @@
 </nav>
 
 <style lang="scss">
-    .navbar-toggler {
-      border: 0 none;
-      letter-spacing: 0.05rem;
-      text-transform: uppercase;
-      &:focus {
-        box-shadow: none;
-      }
+  .navbar-toggler {
+    border: 0 none;
+    letter-spacing: 0.05rem;
+    text-transform: uppercase;
+
+    &:focus {
+      box-shadow: none;
     }
+  }
 </style>
