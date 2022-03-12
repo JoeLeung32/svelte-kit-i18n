@@ -1,26 +1,11 @@
-<script context="module">
+<script>
     // Libraries
     import {browser} from '$app/env'
-    import {loadTranslations, t} from '$lib/translations'
+    import {t} from '$lib/translations'
 
     // Components
     import ColorSchemeSwitcher from '$lib/components/Switcher/ColorSchemeSwitcher.svelte'
-
-    /** @type {import('@sveltejs/kit').Load} */
-    export const load = async ({url}) => {
-        const {pathname} = url
-        const lang = `${pathname.match(/\w+?(?=\/|$)/) || ''}`
-        const route = pathname.replace(new RegExp(`^/${lang}`), '')
-
-        await loadTranslations(lang, route)
-        return {stuff: {route, lang}}
-    }
-</script>
-
-<script>
-    import {page} from '$app/stores'
-
-    $: ({route, lang} = $page.stuff)
+    import LocaleSwitcher from '$lib/components/Switcher/LocaleSwitcher.svelte'
 </script>
 
 {#if browser}
@@ -33,20 +18,10 @@
         </div>
         <div class="d-flex flex-wrap flex-row">
             <div>
-                {#if lang === 'en'}
-                    <a class="curPoi" href={"javascript:void(1)"}
-                       on:click={() => window.location.replace(`/zh${route}`)}>
-                        {$t('lang.zh')}
-                    </a>
-                {:else}
-                    <a class="curPoi" href={"javascript:void(0)"}
-                       on:click={() => window.location.replace(`/en${route}`)}>
-                        {$t('lang.en')}
-                    </a>
-                {/if}
+                <ColorSchemeSwitcher/>
             </div>
             <div class="ms-2">
-                <ColorSchemeSwitcher />
+                <LocaleSwitcher/>
             </div>
         </div>
     </footer>
