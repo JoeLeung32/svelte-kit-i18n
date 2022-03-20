@@ -97,13 +97,20 @@
 </nav>
 
 <style lang="scss">
-  .navbar-toggler {
-    border: 0 none;
-    letter-spacing: 0.05rem;
-    text-transform: uppercase;
+  .navbar {
+    &-brand,
+    &-brand:hover {
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+    &-toggler {
+      border: 0 none;
+      letter-spacing: 0.05rem;
+      text-transform: uppercase;
 
-    &:focus {
-      box-shadow: none;
+      &:focus {
+        box-shadow: none;
+      }
     }
   }
 </style>
