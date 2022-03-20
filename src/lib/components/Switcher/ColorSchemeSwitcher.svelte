@@ -4,7 +4,14 @@
     import {ClassColorScheme, colorScheme} from "$lib/shares/js/ClassColorScheme/ClassColorScheme"
 
     let colorSchemeController
-    export let mode
+    let elementClassName = ['curPoi', 'notSel']
+    const elementTitleText = `common.colorScheme.${$colorScheme}`
+    export let mode,
+        className
+
+    if (className) {
+        elementClassName.push(className)
+    }
 
     const switcherColorScheme = () => {
         colorSchemeController.switch()
@@ -15,12 +22,13 @@
     })
 </script>
 
-<span class="curPoi notSel" title={$t(`common.colorScheme.${$colorScheme}`)} on:click={switcherColorScheme}>
-    {#if mode === 'string'}
-        <a href={"javascript:void(0)"}>
-            {$t(`common.colorScheme.${$colorScheme}To`)}
-        </a>
-    {:else}
+{#if mode === 'string'}
+    <a class={elementClassName.join(' ')} title={$t(elementTitleText)} on:click={switcherColorScheme}
+       href={"javascript:void(0)"}>
+        {$t(`common.colorScheme.${$colorScheme}To`)}
+    </a>
+{:else}
+    <span class={elementClassName.join(' ')} title={$t(elementTitleText)} on:click={switcherColorScheme}>
         <i class="fa-solid fa-circle-half-stroke"></i>
-    {/if}
-</span>
+    </span>
+{/if}
