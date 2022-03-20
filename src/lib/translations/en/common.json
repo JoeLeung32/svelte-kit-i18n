@@ -2,7 +2,9 @@
   "menu": "MENU",
   "colorScheme": {
     "dark": "Dark",
-    "light": "Light"
+    "light": "Light",
+    "darkTo": "Disable Dark Mode",
+    "lightTo": "Enable Dark Mode"
   },
-  "copyright": "Copyright © 2022 ChunKit.hk. All rights reserved."
+  "copyright": "Copyright © {{crYear}} ChunKit.hk"
 }

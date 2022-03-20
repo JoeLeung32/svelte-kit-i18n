@@ -1,9 +1,9 @@
-import Common from '$lib/stores/Common'
+import CommonStore from '$lib/stores/Common'
 import {EnumColorScheme} from "./enums"
 
 const sessionDataKey = 'colorScheme'
 export const ColorScheme = EnumColorScheme
-export const ColorSchemeStore = Common
+export const {colorScheme} = CommonStore
 
 export class ClassColorScheme {
     #sessionPara
@@ -28,7 +28,7 @@ export class ClassColorScheme {
     #update(bool) {
         this.#valScheme = (bool ? ColorScheme.DARK : ColorScheme.LIGHT).description
         window.document.querySelector('html').dataset.colorScheme = this.#valScheme
-        Common.colorScheme.set(this.#valScheme)
+        colorScheme.set(this.#valScheme)
     }
 
     watch() {
