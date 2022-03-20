@@ -13,7 +13,9 @@
     <footer class="d-flex flex-wrap justify-content-between">
         <div class="d-flex flex-wrap flex-row">
             <div>
-                {$t(`common.copyright`)}
+                {$t(`common.copyright`, {
+                    crYear: new Date().getFullYear()
+                })}
             </div>
         </div>
         <div class="d-flex flex-wrap flex-row">

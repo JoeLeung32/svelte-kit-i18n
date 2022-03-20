@@ -6,5 +6,5 @@
     "darkTo": "停用深沉模式",
     "lightTo": "啟用深沉模式"
   },
-  "copyright": "Copyright © 2022 ChunKit.hk. 保留一切權利。"
+  "copyright": "Copyright © {{crYear}} ChunKit.hk"
 }
