@@ -1,30 +1,24 @@
 <script>
     import {onMount} from "svelte";
     import {t} from '$lib/translations'
-    import {ClassColorScheme, ColorSchemeStore} from "$lib/shares/js/ClassColorScheme/ClassColorScheme"
+    import {ClassColorScheme, colorScheme} from "$lib/shares/js/ClassColorScheme/ClassColorScheme"
 
-    let colorScheme,
-        valColorScheme
-    export let mode,
-        className
-
-    ColorSchemeStore.colorScheme.subscribe((obj) => {
-        valColorScheme = obj
-    })
+    let colorSchemeController
+    export let mode
 
     const switcherColorScheme = () => {
-        colorScheme.switch()
+        colorSchemeController.switch()
     }
 
     onMount(async () => {
-        colorScheme = new ClassColorScheme()
+        colorSchemeController = new ClassColorScheme()
     })
 </script>
 
-<span class="curPoi notSel" title={$t(`common.valColorScheme.${valColorScheme}`)} on:click={switcherColorScheme}>
+<span class="curPoi notSel" title={$t(`common.colorScheme.${$colorScheme}`)} on:click={switcherColorScheme}>
     {#if mode === 'string'}
-        <a href={"javascript:void(0)"} class={className}>
-            {$t(`common.colorScheme.${valColorScheme}To`)}
+        <a href={"javascript:void(0)"}>
+            {$t(`common.colorScheme.${$colorScheme}To`)}
         </a>
     {:else}
         <i class="fa-solid fa-circle-half-stroke"></i>

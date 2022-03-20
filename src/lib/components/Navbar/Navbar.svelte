@@ -6,7 +6,7 @@
 
     // Components
     import ColorSchemeSwitcher from '$lib/components/Switcher/ColorSchemeSwitcher.svelte'
-    import {ColorSchemeStore} from "$lib/shares/js/ClassColorScheme/ClassColorScheme"
+    import {colorScheme} from "$lib/shares/js/ClassColorScheme/ClassColorScheme"
 
     $: ({route, lang} = $page.stuff)
     const colorSchemeMapping = {
@@ -29,7 +29,7 @@
     onMount(async () => {
         checkActiveNav()
         checkColorSchemeMode(window.document.querySelector('html').dataset.colorScheme)
-        ColorSchemeStore.colorScheme.subscribe((obj) => {
+        colorScheme.subscribe((obj) => {
             checkColorSchemeMode(obj)
         })
     })
